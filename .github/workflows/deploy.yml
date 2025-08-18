@@ -27,16 +27,16 @@ jobs:
       - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v3
         with:
-          host: 3.109.184.227               # EC2 Public IP / Elastic IP
-          username: ubuntu                  # default user for Ubuntu EC2
-          key: ${{ secrets.SSH_PRIVATE_KEY}}  # private key that matches authorized_keys on EC2
+          host: 3.109.184.227                     # EC2 Public IP / Elastic IP
+          username: ubuntu                        # default user for Ubuntu EC2
+          key: ${{ secrets.SSH_PRIVATE_KEY }}     # private key that matches authorized_keys on EC2
           port: 22
           timeout: 60s
           command_timeout: 10m
+          envs: DOCKER_USERNAME,DOCKER_PASSWORD   # pass Docker creds as envs
           script: |
-            sudo apt update
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/my_app:latest
+            docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+            docker pull $DOCKER_USERNAME/my_app:latest
             cd /home/ubuntu/my_project
-            docker compose down || true
-            docker compose up -d
+            docker-compose down || true
+            docker-compose up -d
