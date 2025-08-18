@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: Dockerfile
+      image: kharwararun/my_app:latest
+    ports:
+      - "8000:8080"
+    networks:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/default.conf:/etc/nginx/conf.d/default.conf:ro  # Mount config
+    
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
