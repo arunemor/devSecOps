@@ -31,9 +31,10 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
-          timeout: 60s
-          command_timeout: 10m
+          timeout: 120s                # Increased timeout for slow connections
+          command_timeout: 15m         # Increased command timeout for long-running jobs
           envs: DOCKER_USERNAME,DOCKER_PASSWORD
+          debug: true                  # Enable debug output for troubleshooting
           script: |
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
             docker pull $DOCKER_USERNAME/my_app:latest
